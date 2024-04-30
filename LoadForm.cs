@@ -10,17 +10,11 @@ using System.Windows.Forms;
 
 namespace dictionary_examen_Bukov
 {
-    public partial class MainForm : Form
+    public partial class LoadForm : Form
     {
-        public MainForm()
+        public LoadForm()
         {
             InitializeComponent();
-        }
-
-        private void Load_dictionary_button_Click(object sender, EventArgs e)
-        {
-            LoadForm loadForm = new LoadForm();
-            loadForm.Show();
         }
     }
 }
