@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static dictionary_examen_Bukov.Word;
+﻿using System.Collections.Generic;
 
-namespace dictionary_examen_Bukov
+namespace dictionary_examen_Bukov.Models
 {
-    internal class Dictionary
+    public class Dictionary
     {
         public List<Word> Words { get; set; }
 
@@ -16,7 +11,7 @@ namespace dictionary_examen_Bukov
             Words = new List<Word>();
         }
 
-        public void AddWord(string originalWord, string[] translations)
+        public void AddWord(string originalWord, List<string> translations)
         {
             Word word = new Word(originalWord);
             foreach (string translationText in translations)

@@ -1,4 +1,4 @@
-﻿namespace dictionary_examen_Bukov
+﻿namespace DictionaryExamenBukov.View
 {
     partial class DictionaryForm
     {

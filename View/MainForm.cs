@@ -1,33 +1,33 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
+using DictionaryExamenBukov.ViewModel;
 
-namespace dictionary_examen_Bukov
+namespace DictionaryExamenBukov.View
 {
     public partial class MainForm : Form
     {
-        public MainForm()
+        private readonly DictionaryViewModel _viewModel;
+
+        public MainForm(DictionaryViewModel viewModel)
         {
             InitializeComponent();
+            _viewModel = viewModel;
         }
 
         private async void Load_dictionary_button_Click(object sender, EventArgs e)
         {
-            // Создаем диалоговое окно для выбора файла
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Текстовые файлы|*.txt";
             openFileDialog.Title = "Выберите файл словаря";
             openFileDialog.InitialDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Dictionary");
 
-            // Если пользователь выбрал файл и нажал "ОК", открываем этот файл
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                // Получаем путь к выбранному файлу
                 string filePath = openFileDialog.FileName;
 
-                // Создаем экземпляр DictionaryForm и передаем ему выбранный файл
-                DictionaryForm dictionaryForm = new DictionaryForm();
-                await dictionaryForm.LoadAndShowAsync(filePath);
+                DictionaryForm dictionaryForm = new DictionaryForm(_viewModel);
+                dictionaryForm.LoadAndShowAsync(filePath);
             }
         }
     }
