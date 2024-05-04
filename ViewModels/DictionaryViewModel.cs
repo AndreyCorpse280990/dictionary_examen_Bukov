@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ namespace dictionary_examen_Bukov.ViewModels
         private readonly DictionaryService _dictionaryService;
         private string _originalText;
         private string _translationText;
+        private List<Word> _words; // список слов
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -27,6 +29,7 @@ namespace dictionary_examen_Bukov.ViewModels
                 }
             }
         }
+
 
         public string TranslationText
         {
@@ -49,6 +52,7 @@ namespace dictionary_examen_Bukov.ViewModels
         public void LoadDictionary(string filePath)
         {
             var dictionary = _dictionaryService.LoadDictionary(filePath);
+            _words = dictionary.Words; // Сохраняю список слов
             UpdateTextBoxes(dictionary);
         }
 
