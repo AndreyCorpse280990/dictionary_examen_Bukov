@@ -1,8 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using dictionary_examen_Bukov.Models;
-using dictionary_examen_Bukov.Services;
 using dictionary_examen_Bukov.ViewModels;
 
 namespace dictionary_examen_Bukov.Views
@@ -21,17 +20,22 @@ namespace dictionary_examen_Bukov.Views
             translationTextBox.DataBindings.Add("Text", _viewModel, "TranslationText");
         }
 
-        public async Task LoadAndShowAsync(string filePath)
+        public void LoadAndShow(string filePath)
         {
             try
             {
-                await _viewModel.LoadDictionaryAsync(filePath);
+                _viewModel.LoadDictionary(filePath);
                 Show();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Ошибка загрузки файла: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        public void SetWordCountStatus(int wordCount)
+        {
+            toolStripStatusLabel1.Text = $"Количество слов: {wordCount}";
         }
     }
 }

@@ -1,42 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
+using System.Linq;
 using dictionary_examen_Bukov.Models;
 
 namespace dictionary_examen_Bukov.Services
 {
     public class DictionaryService
     {
-        public async Task<Dictionary> LoadDictionaryAsync(string filePath)
+        public Dictionary LoadDictionary(string filePath)
         {
             Dictionary dictionary = new Dictionary();
 
-            using (StreamReader reader = new StreamReader(filePath))
+            // Чтение всех строк из файла
+            string[] lines = File.ReadAllLines(filePath);
+
+            foreach (string line in lines)
             {
-                while (!reader.EndOfStream)
+                // Разделение строки на части по символу ';'
+                string[] parts = line.Split(';');
+
+                // Проверка на корректное количество частей
+                if (parts.Length == 2)
                 {
-                    string line = await reader.ReadLineAsync();
-                    string[] parts = line.Split(';');
-                    if (parts.Length == 2)
-                    {
-                        string originalWord = parts[0].Trim('"');
-                        string[] translations = parts[1].Trim('"').Split('|');
+                    string originalWord = parts[0].Trim('"'); // Оригинальное слово
+                    string[] translations = parts[1].Trim('"').Split('|'); // Переводы
 
-                        // Преобразуем массив строк в список строк
-                        List<string> translationList = new List<string>(translations);
+                    // Создание списка переводов
+                    List<string> translationList = new List<string>(translations);
 
-                        // Передаем список строк методу AddWord
-                        dictionary.AddWord(originalWord, translationList);
-                    }
-                    else
-                    {
-                        throw new FormatException("Ошибка: неверный формат строки в файле.");
-                    }
+                    // Добавление слова и его переводов в словарь
+                    dictionary.AddWord(originalWord, translationList);
+                }
+                else
+                {
+                    throw new FormatException("Ошибка: неверный формат строки в файле.");
                 }
             }
 
             return dictionary;
+        }
+
+        public int GetWordCount(string filePath)
+        {
+            string[] lines = File.ReadAllLines(filePath);
+            return lines.Length;
         }
     }
 }

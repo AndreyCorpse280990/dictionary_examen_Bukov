@@ -46,9 +46,9 @@ namespace dictionary_examen_Bukov.ViewModels
             _dictionaryService = dictionaryService;
         }
 
-        public async Task LoadDictionaryAsync(string filePath)
+        public void LoadDictionary(string filePath)
         {
-            var dictionary = await _dictionaryService.LoadDictionaryAsync(filePath);
+            var dictionary = _dictionaryService.LoadDictionary(filePath);
             UpdateTextBoxes(dictionary);
         }
 

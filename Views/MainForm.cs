@@ -14,9 +14,9 @@ namespace dictionary_examen_Bukov
             InitializeComponent();
         }
 
-        private async void Load_dictionary_button_Click(object sender, EventArgs e)
+        private void Load_dictionary_button_Click(object sender, EventArgs e)
         {
-            // Создаем диалоговое окно для выбора файла
+            // Создаем диалоговое окно для выбора файла 
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Текстовые файлы|*.txt";
             openFileDialog.Title = "Выберите файл словаря";
@@ -34,7 +34,15 @@ namespace dictionary_examen_Bukov
 
                 // Создаем экземпляр DictionaryForm и передаем ему модель представления
                 var dictionaryForm = new DictionaryForm(viewModel);
-                await dictionaryForm.LoadAndShowAsync(filePath);
+
+                // Загружаем словарь и отображаем форму
+                dictionaryForm.LoadAndShow(filePath);
+
+                // Получаем количество слов в словаре
+                int wordCount = dictionaryService.GetWordCount(filePath);
+
+                // Устанавливаем значение счетчика слов в statusStrip1
+                dictionaryForm.SetWordCountStatus(wordCount);
             }
         }
     }
