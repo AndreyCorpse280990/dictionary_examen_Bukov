@@ -32,7 +32,8 @@ namespace dictionary_examen_Bukov.Views
         {
             try
             {
-                _viewModel.LoadDictionary(filePath);
+                _words = _viewModel.GetWords(filePath);
+                ShowPage(1);
                 Show();
             }
             catch (Exception ex)
@@ -63,12 +64,13 @@ namespace dictionary_examen_Bukov.Views
 
 
 
-        private void previous_Button_Click(object sender, EventArgs e)
+        private void Previous_Button_Click(object sender, EventArgs e)
         {
             if (currentPage > 1)
             {
                 currentPage--;
                 ShowPage(currentPage);
+                SetNumberPage();
             }
         }
 
@@ -79,7 +81,65 @@ namespace dictionary_examen_Bukov.Views
             {
                 currentPage++;
                 ShowPage(currentPage);
+                SetNumberPage();
             }
         }
+
+        // перемещение на 3 страницы вперед
+        private void ThreePageNextButton_Click(object sender, EventArgs e)
+        {
+            int totalPages = (_words.Count + pageSize - 1) / pageSize;
+            if (currentPage + 3 <= totalPages) // Проверка, чтобы не выйти за пределы массива
+            {
+                currentPage += 3;
+                ShowPage(currentPage);
+                SetNumberPage();
+            }
+            else if (currentPage < totalPages)
+            {
+                currentPage = totalPages; // Если currentPage + 3 больше или равно totalPages, перемещаемся на последнюю страницу
+                ShowPage(currentPage);
+                SetNumberPage();
+            }
+        }
+
+
+        // перемещение на 3 страницы назад
+        private void threePagePreviousButton_Click(object sender, EventArgs e)
+        {
+            if (currentPage > 3) // Проверка, чтобы не выйти за пределы массива
+            {
+                currentPage -= 3;
+                ShowPage(currentPage);
+                SetNumberPage();
+            }
+            else if (currentPage > 1)
+            {
+                currentPage = 1;
+                ShowPage(currentPage);
+                SetNumberPage();
+            }
+        }
+
+        private void firstPageButton_Click(object sender, EventArgs e)
+        {
+            currentPage = 1;
+            ShowPage(currentPage);
+            SetNumberPage();
+        }
+
+        private void endPageButton_Click(object sender, EventArgs e)
+        {
+            int totalPages = (_words.Count + pageSize - 1) / pageSize;
+            currentPage = totalPages; // Переход на последнюю страницу
+            ShowPage(currentPage);
+            SetNumberPage();
+        }
+
+        public void SetNumberPage()
+        {
+            toolStripStatusLabel2.Text = $"Страница {currentPage}";
+        }
     }
+
 }

@@ -43,6 +43,10 @@ namespace dictionary_examen_Bukov
 
                 // Устанавливаем значение счетчика слов в statusStrip1
                 dictionaryForm.SetWordCountStatus(wordCount);
+                dictionaryForm.SetNumberPage();
+
+                dictionaryForm.LoadAndShow(filePath);
+
             }
         }
     }

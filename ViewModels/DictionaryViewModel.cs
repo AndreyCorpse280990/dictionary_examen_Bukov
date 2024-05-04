@@ -61,5 +61,11 @@ namespace dictionary_examen_Bukov.ViewModels
             OriginalText = string.Join(Environment.NewLine, dictionary.Words.Select(w => w.OriginalWord));
             TranslationText = string.Join(Environment.NewLine, dictionary.Words.Select(w => string.Join(", ", w.Translations)));
         }
+
+        public List<Word> GetWords(string filePath)
+        {
+            return _dictionaryService.LoadDictionary(filePath).Words;
+        }
+
     }
 }

@@ -20,7 +20,6 @@ namespace dictionary_examen_Bukov.Services
                 // Разделение строки на части по символу ';'
                 string[] parts = line.Split(';');
 
-                // Проверка на корректное количество частей
                 if (parts.Length == 2)
                 {
                     string originalWord = parts[0].Trim('"'); // Оригинальное слово
