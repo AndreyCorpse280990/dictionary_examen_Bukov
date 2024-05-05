@@ -45,17 +45,18 @@
             this.originalTextBox = new System.Windows.Forms.TextBox();
             this.okButton = new System.Windows.Forms.Button();
             this.EditButton = new System.Windows.Forms.Button();
+            this.translatelistBox = new System.Windows.Forms.ListBox();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // translationTextBox
             // 
             this.translationTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.translationTextBox.Location = new System.Drawing.Point(368, 38);
+            this.translationTextBox.Location = new System.Drawing.Point(345, 112);
             this.translationTextBox.Multiline = true;
             this.translationTextBox.Name = "translationTextBox";
             this.translationTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.translationTextBox.Size = new System.Drawing.Size(418, 388);
+            this.translationTextBox.Size = new System.Drawing.Size(392, 225);
             this.translationTextBox.TabIndex = 1;
             // 
             // splitter1
@@ -201,11 +202,20 @@
             this.EditButton.UseVisualStyleBackColor = true;
             this.EditButton.Click += new System.EventHandler(this.EditButton_Click);
             // 
+            // translatelistBox
+            // 
+            this.translatelistBox.FormattingEnabled = true;
+            this.translatelistBox.Location = new System.Drawing.Point(739, 112);
+            this.translatelistBox.Name = "translatelistBox";
+            this.translatelistBox.Size = new System.Drawing.Size(324, 225);
+            this.translatelistBox.TabIndex = 21;
+            // 
             // DictionaryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1075, 576);
+            this.Controls.Add(this.translatelistBox);
             this.Controls.Add(this.EditButton);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.originalTextBox);
@@ -248,5 +258,6 @@
         private System.Windows.Forms.TextBox originalTextBox;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button EditButton;
+        private System.Windows.Forms.ListBox translatelistBox;
     }
 }

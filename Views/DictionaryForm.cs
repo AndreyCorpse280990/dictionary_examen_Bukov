@@ -26,9 +26,13 @@ namespace dictionary_examen_Bukov.Views
             // Привязка данных
             original_List_Box.DisplayMember = "OriginalWord"; // Установка свойства для отображения оригинального слова
             original_List_Box.DataSource = _viewModel.Words;
-            translationTextBox.DataBindings.Add("Text", _viewModel, "TranslationText");
+           // translationTextBox.DataBindings.Add("Text", _viewModel, "TranslationText");
+            translatelistBox.DisplayMember = "TranslateWord";
+            translatelistBox.DataSource = _viewModel.Words;
             // Добавляем обработчик события SelectedIndexChanged для original_List_Box
             original_List_Box.SelectedIndexChanged += original_List_Box_SelectedIndexChanged;
+            translatelistBox.SelectedIndexChanged += translatelistBox_SelectedIndexChanged;
+
 
             // Скрываем текстовое поле и кнопку OK при инициализации формы
             EditButton.Enabled = false;
@@ -199,9 +203,20 @@ namespace dictionary_examen_Bukov.Views
                 // Заполняем текстовое поле оригинального слова выбранным словом
                 originalTextBox.Text = selectedWord.OriginalWord;
 
-                // Обновляем TranslationText с помощью выбранного слова
-                translationTextBox.Text = string.Join(", ", selectedWord.Translations);
+                // Обновляем translatelistBox с помощью выбранного слова
+                translatelistBox.DataSource = selectedWord.Translations;
+                translatelistBox.Refresh();
             }
+        }
+
+        private void translatelistBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Получаем выбранное слово из списка
+            Word selectedWord = (Word)original_List_Box.SelectedItem;
+
+            // Обновляем translatelistBox с помощью выбранного слова
+            translatelistBox.DataSource = selectedWord.Translations;
+            translatelistBox.Refresh();
         }
 
 
@@ -211,18 +226,21 @@ namespace dictionary_examen_Bukov.Views
             // Получаем выбранное слово из списка или другого элемента управления
             _selectedWord = original_List_Box.SelectedItem as Word;
 
+            // Переключаемся в режим редактирования
+            _isEditing = true;
 
-                // Переключаемся в режим редактирования
-                _isEditing = true;
+            // Включаем режим редактирования элементов управления
+            originalTextBox.Enabled = true;
+            okButton.Enabled = true;
 
-                // Включаем режим редактирования элементов управления
-                originalTextBox.Enabled = true;
-                okButton.Enabled = true;
+            // Очищаем translatelistBox перед редактированием
+            translatelistBox.DataSource = null;
+            translatelistBox.Refresh();
 
-                // Фокусируемся на поле originalTextBox
-                originalTextBox.Focus();
-            
+            // Фокусируемся на поле originalTextBox
+            originalTextBox.Focus();
         }
+
 
 
 
@@ -275,8 +293,6 @@ namespace dictionary_examen_Bukov.Views
                 ShowPage(currentPage);
             }
         }
-
-
         public void SaveDictionary(List<Word> words, string filePath)
         {
             List<string> lines = new List<string>();
