@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.originalTextBox = new System.Windows.Forms.TextBox();
             this.translationTextBox = new System.Windows.Forms.TextBox();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -42,18 +41,12 @@
             this.threePagePreviousButton = new System.Windows.Forms.Button();
             this.searchTextBox = new System.Windows.Forms.TextBox();
             this.Search_button = new System.Windows.Forms.Button();
+            this.original_List_Box = new System.Windows.Forms.ListBox();
+            this.originalTextBox = new System.Windows.Forms.TextBox();
+            this.okButton = new System.Windows.Forms.Button();
+            this.EditButton = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // originalTextBox
-            // 
-            this.originalTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.originalTextBox.Location = new System.Drawing.Point(12, 38);
-            this.originalTextBox.Multiline = true;
-            this.originalTextBox.Name = "originalTextBox";
-            this.originalTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.originalTextBox.Size = new System.Drawing.Size(350, 388);
-            this.originalTextBox.TabIndex = 0;
             // 
             // translationTextBox
             // 
@@ -173,11 +166,50 @@
             this.Search_button.UseVisualStyleBackColor = true;
             this.Search_button.Click += new System.EventHandler(this.Search_button_Click);
             // 
+            // original_List_Box
+            // 
+            this.original_List_Box.FormattingEnabled = true;
+            this.original_List_Box.Location = new System.Drawing.Point(0, 112);
+            this.original_List_Box.Name = "original_List_Box";
+            this.original_List_Box.Size = new System.Drawing.Size(324, 225);
+            this.original_List_Box.TabIndex = 15;
+            // 
+            // originalTextBox
+            // 
+            this.originalTextBox.Location = new System.Drawing.Point(3, 58);
+            this.originalTextBox.Name = "originalTextBox";
+            this.originalTextBox.Size = new System.Drawing.Size(100, 20);
+            this.originalTextBox.TabIndex = 18;
+            // 
+            // okButton
+            // 
+            this.okButton.Location = new System.Drawing.Point(130, 54);
+            this.okButton.Name = "okButton";
+            this.okButton.Size = new System.Drawing.Size(75, 23);
+            this.okButton.TabIndex = 19;
+            this.okButton.Text = "ok";
+            this.okButton.UseVisualStyleBackColor = true;
+            this.okButton.Click += new System.EventHandler(this.okButton_Click_1);
+            // 
+            // EditButton
+            // 
+            this.EditButton.Location = new System.Drawing.Point(129, 371);
+            this.EditButton.Name = "EditButton";
+            this.EditButton.Size = new System.Drawing.Size(75, 23);
+            this.EditButton.TabIndex = 20;
+            this.EditButton.Text = "Edit";
+            this.EditButton.UseVisualStyleBackColor = true;
+            this.EditButton.Click += new System.EventHandler(this.EditButton_Click);
+            // 
             // DictionaryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1075, 576);
+            this.Controls.Add(this.EditButton);
+            this.Controls.Add(this.okButton);
+            this.Controls.Add(this.originalTextBox);
+            this.Controls.Add(this.original_List_Box);
             this.Controls.Add(this.Search_button);
             this.Controls.Add(this.searchTextBox);
             this.Controls.Add(this.threePagePreviousButton);
@@ -189,7 +221,6 @@
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.splitter1);
             this.Controls.Add(this.translationTextBox);
-            this.Controls.Add(this.originalTextBox);
             this.Name = "DictionaryForm";
             this.Text = "DictionaryForm";
             this.statusStrip1.ResumeLayout(false);
@@ -200,8 +231,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox originalTextBox;
         private System.Windows.Forms.TextBox translationTextBox;
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.StatusStrip statusStrip1;
@@ -215,5 +244,9 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
         private System.Windows.Forms.TextBox searchTextBox;
         private System.Windows.Forms.Button Search_button;
+        private System.Windows.Forms.ListBox original_List_Box;
+        private System.Windows.Forms.TextBox originalTextBox;
+        private System.Windows.Forms.Button okButton;
+        private System.Windows.Forms.Button EditButton;
     }
 }

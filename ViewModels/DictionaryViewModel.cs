@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -17,6 +18,9 @@ namespace dictionary_examen_Bukov.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public Dictionary Dictionary { get; set; }
+        public string FilePath { get; set; }
+
         public string OriginalText
         {
             get { return _originalText; }
@@ -29,7 +33,6 @@ namespace dictionary_examen_Bukov.ViewModels
                 }
             }
         }
-
 
         public string TranslationText
         {
@@ -44,16 +47,23 @@ namespace dictionary_examen_Bukov.ViewModels
             }
         }
 
+        public List<Word> Words
+        {
+            get { return _words; }
+        }
+
         public DictionaryViewModel(DictionaryService dictionaryService)
         {
             _dictionaryService = dictionaryService;
+            Dictionary = new Dictionary();
         }
 
         public void LoadDictionary(string filePath)
         {
-            var dictionary = _dictionaryService.LoadDictionary(filePath);
-            _words = dictionary.Words; // Сохраняю список слов
-            UpdateTextBoxes(dictionary);
+            Dictionary = _dictionaryService.LoadDictionary(filePath);
+            _words = Dictionary.Words; // Сохраняю список слов
+            UpdateTextBoxes(Dictionary);
+            FilePath = filePath;
         }
 
         private void UpdateTextBoxes(Dictionary dictionary)
@@ -67,5 +77,15 @@ namespace dictionary_examen_Bukov.ViewModels
             return _dictionaryService.LoadDictionary(filePath).Words;
         }
 
+        public void SaveDictionary(List<Word> words, string filePath)
+        {
+            List<string> lines = new List<string>();
+            foreach (var word in words)
+            {
+                string translations = string.Join("|", word.Translations);
+                lines.Add($"\"{word.OriginalWord}\";\"{translations}\"");
+            }
+            File.WriteAllLines(filePath, lines);
+        }
     }
 }
