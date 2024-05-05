@@ -33,13 +33,15 @@
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.previous_Button = new System.Windows.Forms.Button();
             this.next_Button = new System.Windows.Forms.Button();
             this.firstPageButton = new System.Windows.Forms.Button();
             this.endPageButton = new System.Windows.Forms.Button();
             this.threePageNextButton = new System.Windows.Forms.Button();
             this.threePagePreviousButton = new System.Windows.Forms.Button();
-            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.searchTextBox = new System.Windows.Forms.TextBox();
+            this.Search_button = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -87,6 +89,12 @@
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(127, 17);
             this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+            // 
+            // toolStripStatusLabel2
+            // 
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(127, 17);
+            this.toolStripStatusLabel2.Text = "toolStripStatusLabel1";
             // 
             // previous_Button
             // 
@@ -148,17 +156,30 @@
             this.threePagePreviousButton.UseVisualStyleBackColor = true;
             this.threePagePreviousButton.Click += new System.EventHandler(this.threePagePreviousButton_Click);
             // 
-            // toolStripStatusLabel2
+            // searchTextBox
             // 
-            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(127, 17);
-            this.toolStripStatusLabel2.Text = "toolStripStatusLabel1";
+            this.searchTextBox.Location = new System.Drawing.Point(715, 481);
+            this.searchTextBox.Name = "searchTextBox";
+            this.searchTextBox.Size = new System.Drawing.Size(100, 20);
+            this.searchTextBox.TabIndex = 13;
+            // 
+            // Search_button
+            // 
+            this.Search_button.Location = new System.Drawing.Point(836, 481);
+            this.Search_button.Name = "Search_button";
+            this.Search_button.Size = new System.Drawing.Size(75, 23);
+            this.Search_button.TabIndex = 14;
+            this.Search_button.Text = "Поиск";
+            this.Search_button.UseVisualStyleBackColor = true;
+            this.Search_button.Click += new System.EventHandler(this.Search_button_Click);
             // 
             // DictionaryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1075, 576);
+            this.Controls.Add(this.Search_button);
+            this.Controls.Add(this.searchTextBox);
             this.Controls.Add(this.threePagePreviousButton);
             this.Controls.Add(this.threePageNextButton);
             this.Controls.Add(this.endPageButton);
@@ -192,5 +213,7 @@
         private System.Windows.Forms.Button threePageNextButton;
         private System.Windows.Forms.Button threePagePreviousButton;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
+        private System.Windows.Forms.TextBox searchTextBox;
+        private System.Windows.Forms.Button Search_button;
     }
 }

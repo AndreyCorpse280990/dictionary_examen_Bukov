@@ -140,6 +140,28 @@ namespace dictionary_examen_Bukov.Views
         {
             toolStripStatusLabel2.Text = $"Страница {currentPage}";
         }
+
+        private void Search_button_Click(object sender, EventArgs e)
+        {
+            string seachWord = searchTextBox.Text;
+
+            Word foundWord = null;
+            foreach(Word word in _words)
+            {
+                if(word.OriginalWord.ToLower() == seachWord.ToLower())
+                {
+                    foundWord = word;
+                    break;
+                }
+            }
+
+            if (foundWord != null)
+            {
+                originalTextBox.Text = foundWord.OriginalWord;
+
+                translationTextBox.Text = string.Join(", ", foundWord.Translations);
+            }
+        }
     }
 
 }
