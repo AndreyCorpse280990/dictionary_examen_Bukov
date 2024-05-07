@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.translationTextBox = new System.Windows.Forms.TextBox();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -43,21 +42,16 @@
             this.Search_button = new System.Windows.Forms.Button();
             this.original_List_Box = new System.Windows.Forms.ListBox();
             this.originalTextBox = new System.Windows.Forms.TextBox();
-            this.okButton = new System.Windows.Forms.Button();
-            this.EditButton = new System.Windows.Forms.Button();
+            this.ok_original_Button = new System.Windows.Forms.Button();
+            this.Edit_Original_Button = new System.Windows.Forms.Button();
             this.translatelistBox = new System.Windows.Forms.ListBox();
+            this.cancel_Original_Button = new System.Windows.Forms.Button();
+            this.Translate_Text_box = new System.Windows.Forms.TextBox();
+            this.ok_translate_button = new System.Windows.Forms.Button();
+            this.cancel_translate_button = new System.Windows.Forms.Button();
+            this.edit_translate_button = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // translationTextBox
-            // 
-            this.translationTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.translationTextBox.Location = new System.Drawing.Point(345, 112);
-            this.translationTextBox.Multiline = true;
-            this.translationTextBox.Name = "translationTextBox";
-            this.translationTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.translationTextBox.Size = new System.Drawing.Size(392, 225);
-            this.translationTextBox.TabIndex = 1;
             // 
             // splitter1
             // 
@@ -182,42 +176,94 @@
             this.originalTextBox.Size = new System.Drawing.Size(100, 20);
             this.originalTextBox.TabIndex = 18;
             // 
-            // okButton
+            // ok_original_Button
             // 
-            this.okButton.Location = new System.Drawing.Point(130, 54);
-            this.okButton.Name = "okButton";
-            this.okButton.Size = new System.Drawing.Size(75, 23);
-            this.okButton.TabIndex = 19;
-            this.okButton.Text = "ok";
-            this.okButton.UseVisualStyleBackColor = true;
-            this.okButton.Click += new System.EventHandler(this.okButton_Click_1);
+            this.ok_original_Button.Location = new System.Drawing.Point(130, 54);
+            this.ok_original_Button.Name = "ok_original_Button";
+            this.ok_original_Button.Size = new System.Drawing.Size(75, 23);
+            this.ok_original_Button.TabIndex = 19;
+            this.ok_original_Button.Text = "ok";
+            this.ok_original_Button.UseVisualStyleBackColor = true;
+            this.ok_original_Button.Click += new System.EventHandler(this.okButton_Click_1);
             // 
-            // EditButton
+            // Edit_Original_Button
             // 
-            this.EditButton.Location = new System.Drawing.Point(129, 371);
-            this.EditButton.Name = "EditButton";
-            this.EditButton.Size = new System.Drawing.Size(75, 23);
-            this.EditButton.TabIndex = 20;
-            this.EditButton.Text = "Edit";
-            this.EditButton.UseVisualStyleBackColor = true;
-            this.EditButton.Click += new System.EventHandler(this.EditButton_Click);
+            this.Edit_Original_Button.Location = new System.Drawing.Point(129, 371);
+            this.Edit_Original_Button.Name = "Edit_Original_Button";
+            this.Edit_Original_Button.Size = new System.Drawing.Size(75, 23);
+            this.Edit_Original_Button.TabIndex = 20;
+            this.Edit_Original_Button.Text = "Edit";
+            this.Edit_Original_Button.UseVisualStyleBackColor = true;
+            this.Edit_Original_Button.Click += new System.EventHandler(this.EditButton_Click);
             // 
             // translatelistBox
             // 
             this.translatelistBox.FormattingEnabled = true;
-            this.translatelistBox.Location = new System.Drawing.Point(739, 112);
+            this.translatelistBox.Location = new System.Drawing.Point(446, 112);
             this.translatelistBox.Name = "translatelistBox";
             this.translatelistBox.Size = new System.Drawing.Size(324, 225);
             this.translatelistBox.TabIndex = 21;
+            // 
+            // cancel_Original_Button
+            // 
+            this.cancel_Original_Button.Location = new System.Drawing.Point(211, 54);
+            this.cancel_Original_Button.Name = "cancel_Original_Button";
+            this.cancel_Original_Button.Size = new System.Drawing.Size(75, 23);
+            this.cancel_Original_Button.TabIndex = 22;
+            this.cancel_Original_Button.Text = "cancel";
+            this.cancel_Original_Button.UseVisualStyleBackColor = true;
+            this.cancel_Original_Button.Click += new System.EventHandler(this.cancelButton_Click);
+            // 
+            // Translate_Text_box
+            // 
+            this.Translate_Text_box.Location = new System.Drawing.Point(465, 58);
+            this.Translate_Text_box.Name = "Translate_Text_box";
+            this.Translate_Text_box.Size = new System.Drawing.Size(100, 20);
+            this.Translate_Text_box.TabIndex = 23;
+            // 
+            // ok_translate_button
+            // 
+            this.ok_translate_button.Location = new System.Drawing.Point(567, 58);
+            this.ok_translate_button.Name = "ok_translate_button";
+            this.ok_translate_button.Size = new System.Drawing.Size(75, 23);
+            this.ok_translate_button.TabIndex = 24;
+            this.ok_translate_button.Text = "ok";
+            this.ok_translate_button.UseVisualStyleBackColor = true;
+            this.ok_translate_button.Click += new System.EventHandler(this.ok_translate_button_Click);
+            // 
+            // cancel_translate_button
+            // 
+            this.cancel_translate_button.Location = new System.Drawing.Point(648, 58);
+            this.cancel_translate_button.Name = "cancel_translate_button";
+            this.cancel_translate_button.Size = new System.Drawing.Size(75, 23);
+            this.cancel_translate_button.TabIndex = 25;
+            this.cancel_translate_button.Text = "cancel";
+            this.cancel_translate_button.UseVisualStyleBackColor = true;
+            this.cancel_translate_button.Click += new System.EventHandler(this.cancel_translate_button_Click);
+            // 
+            // edit_translate_button
+            // 
+            this.edit_translate_button.Location = new System.Drawing.Point(446, 371);
+            this.edit_translate_button.Name = "edit_translate_button";
+            this.edit_translate_button.Size = new System.Drawing.Size(75, 23);
+            this.edit_translate_button.TabIndex = 26;
+            this.edit_translate_button.Text = "Edit";
+            this.edit_translate_button.UseVisualStyleBackColor = true;
+            this.edit_translate_button.Click += new System.EventHandler(this.edit_translate_button_Click);
             // 
             // DictionaryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1075, 576);
+            this.Controls.Add(this.edit_translate_button);
+            this.Controls.Add(this.cancel_translate_button);
+            this.Controls.Add(this.ok_translate_button);
+            this.Controls.Add(this.Translate_Text_box);
+            this.Controls.Add(this.cancel_Original_Button);
             this.Controls.Add(this.translatelistBox);
-            this.Controls.Add(this.EditButton);
-            this.Controls.Add(this.okButton);
+            this.Controls.Add(this.Edit_Original_Button);
+            this.Controls.Add(this.ok_original_Button);
             this.Controls.Add(this.originalTextBox);
             this.Controls.Add(this.original_List_Box);
             this.Controls.Add(this.Search_button);
@@ -230,7 +276,6 @@
             this.Controls.Add(this.previous_Button);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.splitter1);
-            this.Controls.Add(this.translationTextBox);
             this.Name = "DictionaryForm";
             this.Text = "DictionaryForm";
             this.statusStrip1.ResumeLayout(false);
@@ -241,7 +286,6 @@
         }
 
         #endregion
-        private System.Windows.Forms.TextBox translationTextBox;
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
@@ -256,8 +300,13 @@
         private System.Windows.Forms.Button Search_button;
         private System.Windows.Forms.ListBox original_List_Box;
         private System.Windows.Forms.TextBox originalTextBox;
-        private System.Windows.Forms.Button okButton;
-        private System.Windows.Forms.Button EditButton;
+        private System.Windows.Forms.Button ok_original_Button;
+        private System.Windows.Forms.Button Edit_Original_Button;
         private System.Windows.Forms.ListBox translatelistBox;
+        private System.Windows.Forms.Button cancel_Original_Button;
+        private System.Windows.Forms.TextBox Translate_Text_box;
+        private System.Windows.Forms.Button ok_translate_button;
+        private System.Windows.Forms.Button cancel_translate_button;
+        private System.Windows.Forms.Button edit_translate_button;
     }
 }

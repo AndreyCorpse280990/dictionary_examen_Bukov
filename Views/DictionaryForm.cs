@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using dictionary_examen_Bukov.Models;
 using dictionary_examen_Bukov.ViewModels;
+using static dictionary_examen_Bukov.Models.Word;
 
 namespace dictionary_examen_Bukov.Views
 {
@@ -26,17 +27,19 @@ namespace dictionary_examen_Bukov.Views
             // Привязка данных
             original_List_Box.DisplayMember = "OriginalWord"; // Установка свойства для отображения оригинального слова
             original_List_Box.DataSource = _viewModel.Words;
-           // translationTextBox.DataBindings.Add("Text", _viewModel, "TranslationText");
+            // translationTextBox.DataBindings.Add("Text", _viewModel, "TranslationText");
             translatelistBox.DisplayMember = "TranslateWord";
             translatelistBox.DataSource = _viewModel.Words;
             // Добавляем обработчик события SelectedIndexChanged для original_List_Box
             original_List_Box.SelectedIndexChanged += original_List_Box_SelectedIndexChanged;
             translatelistBox.SelectedIndexChanged += translatelistBox_SelectedIndexChanged;
+            translatelistBox.SelectedIndexChanged += translatelistBox_SelectedIndexChanged_Edit;
+
 
 
             // Скрываем текстовое поле и кнопку OK при инициализации формы
-            EditButton.Enabled = false;
-            okButton.Enabled = false;
+            Edit_Original_Button.Enabled = false;
+            ok_original_Button.Enabled = false;
             originalTextBox.Enabled = false;
         }
 
@@ -65,7 +68,7 @@ namespace dictionary_examen_Bukov.Views
             int endIndex = startIndex + pageSize;
 
             original_List_Box.Items.Clear();
-            translationTextBox.Clear();
+            translatelistBox.Items.Clear();
 
             for (int i = startIndex; i < endIndex && i < _words.Count; i++)
             {
@@ -183,8 +186,28 @@ namespace dictionary_examen_Bukov.Views
             {
                 // Если слово не найдено, очищаем original_List_Box и translationTextBox
                 original_List_Box.ClearSelected();
-                translationTextBox.Clear();
+                translatelistBox.ClearSelected();
                 MessageBox.Show("Слово не найдено", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+        private void listBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ListBox listBox = sender as ListBox;
+            if (listBox == original_List_Box)
+            {
+                // Если выбрано слово в original_List_Box, обновляем translatelistBox
+                Word selectedWord = (Word)listBox.SelectedItem;
+                translatelistBox.DataSource = selectedWord.Translations;
+                translatelistBox.Refresh();
+            }
+            else if (listBox == translatelistBox)
+            {
+                // Если выбран перевод в translatelistBox, обновляем original_List_Box
+                Word selectedWord = (Word)listBox.SelectedItem;
+                original_List_Box.DataSource = selectedWord.OriginalWord;
+                original_List_Box.Refresh();
             }
         }
 
@@ -198,7 +221,7 @@ namespace dictionary_examen_Bukov.Views
                 Word selectedWord = (Word)original_List_Box.SelectedItem;
 
                 // Включаем кнопку EditButton
-                EditButton.Enabled = true;
+                Edit_Original_Button.Enabled = true;
 
                 // Заполняем текстовое поле оригинального слова выбранным словом
                 originalTextBox.Text = selectedWord.OriginalWord;
@@ -209,7 +232,7 @@ namespace dictionary_examen_Bukov.Views
             }
         }
 
-        private void translatelistBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void translatelistBox_SelectedIndexChanged_Edit(object sender, EventArgs e)
         {
             // Получаем выбранное слово из списка
             Word selectedWord = (Word)original_List_Box.SelectedItem;
@@ -231,7 +254,7 @@ namespace dictionary_examen_Bukov.Views
 
             // Включаем режим редактирования элементов управления
             originalTextBox.Enabled = true;
-            okButton.Enabled = true;
+            ok_original_Button.Enabled = true;
 
             // Очищаем translatelistBox перед редактированием
             translatelistBox.DataSource = null;
@@ -287,7 +310,7 @@ namespace dictionary_examen_Bukov.Views
                 // Очищаем текстовое поле и скрываем кнопку OK
                 originalTextBox.Clear();
                 originalTextBox.Enabled = false;
-                okButton.Enabled = false;
+                ok_original_Button.Enabled = false;
 
                 // Обновляем отображение списка слов
                 ShowPage(currentPage);
@@ -304,6 +327,126 @@ namespace dictionary_examen_Bukov.Views
             File.WriteAllLines(filePath, lines);
         }
 
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            // Очищаем текстовое поле и скрываем кнопку OK
+            originalTextBox.Clear();
+            originalTextBox.Enabled = false;
+            ok_original_Button.Enabled = false;
+
+            // Обновляем отображение списка слов
+            ShowPage(currentPage);
+
+            // Выключаем режим редактирования
+            _isEditing = false;
+        }
+
+        private void translatelistBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Проверяем, находимся ли мы в режиме редактирования
+            if (!_isEditing && translatelistBox.SelectedItem != null && translatelistBox.SelectedItem is Word selectedWord)
+            {
+                // Получаем выбранный перевод
+                Translation selectedTranslation = (Translation)translatelistBox.SelectedItem;
+
+                // Включаем кнопку редактирования
+                edit_translate_button.Enabled = true;
+
+                // Заполняем текстовое поле с переводом выбранным значением
+                Translate_Text_box.Text = selectedTranslation.Text;
+
+                // Очищаем original_List_Box
+                original_List_Box.DataSource = null;
+                original_List_Box.Refresh();
+            }
+        }
+
+
+        private void edit_translate_button_Click(object sender, EventArgs e)
+        {
+            // Проверяем, находимся ли мы в режиме редактирования
+            if (!_isEditing && translatelistBox.SelectedItem != null && translatelistBox.SelectedItem is Translation selectedTranslation)
+            {
+                // Включаем режим редактирования
+                _isEditing = true;
+
+                // Включаем элементы управления для редактирования
+                Translate_Text_box.Enabled = true;
+                ok_translate_button.Enabled = true;
+                cancel_translate_button.Enabled = true;
+
+                // Очищаем original_List_Box перед редактированием
+                original_List_Box.DataSource = null;
+                original_List_Box.Refresh();
+
+                // Получаем выбранный перевод из списка
+                Translate_Text_box.Text = selectedTranslation.Text;
+
+                // Фокусируемся на поле Translate_Text_box
+                Translate_Text_box.Focus();
+            }
+        }
+
+
+
+        private void ok_translate_button_Click(object sender, EventArgs e)
+        {
+            // Проверяем, находимся ли мы в режиме редактирования
+            if (_isEditing && translatelistBox.SelectedItem != null && translatelistBox.SelectedItem is Translation selectedTranslation)
+            {
+                // Обновляем текст перевода
+                selectedTranslation.Text = Translate_Text_box.Text;
+
+                // Запрашиваем у пользователя подтверждение сохранения изменений
+                DialogResult result = MessageBox.Show("Вы хотите сохранить изменения?", "Сохранение", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    // Обновляем список переводов в объекте Word
+                    Word selectedWord = original_List_Box.SelectedItem as Word;
+                    if (selectedWord != null)
+                    {
+                        selectedWord.Translations.Clear();
+                        foreach (var item in translatelistBox.Items)
+                        {
+                            if (item is Translation translation)
+                            {
+                                selectedWord.Translations.Add(translation);
+                            }
+                        }
+                    }
+
+                    // Переключаемся из режима редактирования
+                    _isEditing = false;
+
+                    // Очищаем поле ввода перевода и отключаем кнопки
+                    Translate_Text_box.Clear();
+                    Translate_Text_box.Enabled = false;
+                    ok_translate_button.Enabled = false;
+                    cancel_translate_button.Enabled = false;
+
+                    // Обновляем список слов
+                    ShowPage(currentPage);
+                }
+            }
+        }
+
+
+        private void cancel_translate_button_Click(object sender, EventArgs e)
+        {
+            // Очищаем текстовое поле и скрываем кнопки OK и Cancel
+            Translate_Text_box.Clear();
+            Translate_Text_box.Enabled = false;
+            ok_translate_button.Enabled = false;
+            cancel_translate_button.Enabled = false;
+
+            // Обновляем отображение списка слов
+            ShowPage(currentPage);
+
+            // Выключаем режим редактирования
+            _isEditing = false;
+        }
+
     }
-    }
+}
 
