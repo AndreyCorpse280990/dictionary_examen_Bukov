@@ -13,11 +13,12 @@ namespace dictionary_examen_Bukov.Views
     public partial class DictionaryForm : Form
     {
         private readonly DictionaryViewModel _viewModel;
-        private int pageSize = 10; // Количество слов на странице
+        private int pageSize = 20; // Количество слов на странице
         private int currentPage = 1; // Текущая страница
         private List<Word> _words; // Список слов
         private Word _selectedWord;
-        private bool _isEditing;
+        private bool _isEditingOriginal;
+        private bool _isEditingTranslation;
 
         public DictionaryForm(DictionaryViewModel viewModel)
         {
@@ -35,12 +36,14 @@ namespace dictionary_examen_Bukov.Views
             translatelistBox.SelectedIndexChanged += translatelistBox_SelectedIndexChanged;
             translatelistBox.SelectedIndexChanged += translatelistBox_SelectedIndexChanged_Edit;
 
-
-
             // Скрываем текстовое поле и кнопку OK при инициализации формы
             Edit_Original_Button.Enabled = false;
             ok_original_Button.Enabled = false;
             originalTextBox.Enabled = false;
+
+            Translate_Text_box.Enabled = false;
+            ok_translate_button.Enabled = false;
+
         }
 
         public void LoadAndShow(string filePath)
@@ -68,14 +71,22 @@ namespace dictionary_examen_Bukov.Views
             int endIndex = startIndex + pageSize;
 
             original_List_Box.Items.Clear();
-            translatelistBox.Items.Clear();
+            // Не нужно обнулять и очищать источник данных для translatelistBox
+            translatelistBox.Items.Clear(); // Очищаем предыдущие элементы
 
             for (int i = startIndex; i < endIndex && i < _words.Count; i++)
             {
                 original_List_Box.Items.Add(_words[i]);
             }
-        }
 
+            // Выбираем первое слово на новой странице, если это возможно
+            if (original_List_Box.Items.Count > 0)
+            {
+                original_List_Box.SelectedIndex = 0;
+                // Убедитесь, что обработчик события вызывается с правильными аргументами
+                original_List_Box_SelectedIndexChanged(null, null);
+            }
+        }
 
 
         private void Previous_Button_Click(object sender, EventArgs e)
@@ -215,7 +226,7 @@ namespace dictionary_examen_Bukov.Views
         private void original_List_Box_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Проверяем, выбрано ли слово для редактирования и что _isEditing равно false
-            if (!_isEditing && original_List_Box.SelectedItem != null)
+            if (!_isEditingOriginal && original_List_Box.SelectedItem != null)
             {
                 // Получаем выбранное слово
                 Word selectedWord = (Word)original_List_Box.SelectedItem;
@@ -226,11 +237,20 @@ namespace dictionary_examen_Bukov.Views
                 // Заполняем текстовое поле оригинального слова выбранным словом
                 originalTextBox.Text = selectedWord.OriginalWord;
 
+                // Очищаем translatelistBox перед обновлением
+                translatelistBox.Items.Clear();
+
                 // Обновляем translatelistBox с помощью выбранного слова
-                translatelistBox.DataSource = selectedWord.Translations;
-                translatelistBox.Refresh();
+                if (selectedWord.Translations != null)
+                {
+                    foreach (var translation in selectedWord.Translations)
+                    {
+                        translatelistBox.Items.Add(translation);
+                    }
+                }
             }
         }
+
 
         private void translatelistBox_SelectedIndexChanged_Edit(object sender, EventArgs e)
         {
@@ -250,7 +270,7 @@ namespace dictionary_examen_Bukov.Views
             _selectedWord = original_List_Box.SelectedItem as Word;
 
             // Переключаемся в режим редактирования
-            _isEditing = true;
+            _isEditingOriginal = true;
 
             // Включаем режим редактирования элементов управления
             originalTextBox.Enabled = true;
@@ -270,42 +290,13 @@ namespace dictionary_examen_Bukov.Views
 
         private void okButton_Click_1(object sender, EventArgs e)
         {
-            // Проверяем, находимся ли мы в режиме редактирования и что _selectedWord не равен null
-            if (_isEditing && _selectedWord != null)
+            if (_isEditingOriginal && _selectedWord != null)
             {
                 // Обновляем оригинальное слово выбранным значением из текстового поля
                 _selectedWord.OriginalWord = originalTextBox.Text;
 
-                // Проверяем, что путь к файлу не пуст
-                if (string.IsNullOrEmpty(_viewModel.FilePath))
-                {
-                    // Если путь к файлу пуст, предлагаем пользователю выбрать файл с помощью SaveFileDialog
-                    SaveFileDialog saveFileDialog = new SaveFileDialog();
-                    saveFileDialog.Filter = "Текстовые файлы (*.txt)|*.txt|Все файлы (*.*)|*.*";
-                    saveFileDialog.Title = "Сохранить словарь как...";
-
-                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                    {
-                        _viewModel.FilePath = saveFileDialog.FileName;
-                    }
-                    else
-                    {
-                        // Если пользователь не выбрал файл, отменяем сохранение
-                        return;
-                    }
-                }
-
-                // Запрашиваем согласие пользователя на сохранение изменений
-                DialogResult result = MessageBox.Show("Вы хотите сохранить изменения в файл?", "Сохранение", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-                if (result == DialogResult.Yes)
-                {
-                    // Сохраняем изменения в файл
-                    SaveDictionary(_words, _viewModel.FilePath);
-                }
-
-                // Выключаем режим редактирования
-                _isEditing = false;
+                // Отключаем режим редактирования
+                _isEditingOriginal = false;
 
                 // Очищаем текстовое поле и скрываем кнопку OK
                 originalTextBox.Clear();
@@ -316,6 +307,7 @@ namespace dictionary_examen_Bukov.Views
                 ShowPage(currentPage);
             }
         }
+
         public void SaveDictionary(List<Word> words, string filePath)
         {
             List<string> lines = new List<string>();
@@ -338,13 +330,13 @@ namespace dictionary_examen_Bukov.Views
             ShowPage(currentPage);
 
             // Выключаем режим редактирования
-            _isEditing = false;
+            _isEditingOriginal = false;
         }
 
         private void translatelistBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Проверяем, находимся ли мы в режиме редактирования
-            if (!_isEditing && translatelistBox.SelectedItem != null && translatelistBox.SelectedItem is Word selectedWord)
+            if (!_isEditingTranslation && translatelistBox.SelectedItem != null && translatelistBox.SelectedItem is Word selectedWord)
             {
                 // Получаем выбранный перевод
                 Translation selectedTranslation = (Translation)translatelistBox.SelectedItem;
@@ -365,10 +357,10 @@ namespace dictionary_examen_Bukov.Views
         private void edit_translate_button_Click(object sender, EventArgs e)
         {
             // Проверяем, находимся ли мы в режиме редактирования
-            if (!_isEditing && translatelistBox.SelectedItem != null && translatelistBox.SelectedItem is Translation selectedTranslation)
+            if (!_isEditingTranslation && translatelistBox.SelectedItem != null && translatelistBox.SelectedItem is Translation selectedTranslation)
             {
                 // Включаем режим редактирования
-                _isEditing = true;
+                _isEditingTranslation = true;
 
                 // Включаем элементы управления для редактирования
                 Translate_Text_box.Enabled = true;
@@ -391,45 +383,28 @@ namespace dictionary_examen_Bukov.Views
 
         private void ok_translate_button_Click(object sender, EventArgs e)
         {
-            // Проверяем, находимся ли мы в режиме редактирования
-            if (_isEditing && translatelistBox.SelectedItem != null && translatelistBox.SelectedItem is Translation selectedTranslation)
+            if (_isEditingTranslation && translatelistBox.SelectedItem is Translation selectedTranslation)
             {
-                // Обновляем текст перевода
+                // Обновляем текст перевода выбранным значением из текстового поля
                 selectedTranslation.Text = Translate_Text_box.Text;
 
-                // Запрашиваем у пользователя подтверждение сохранения изменений
-                DialogResult result = MessageBox.Show("Вы хотите сохранить изменения?", "Сохранение", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                // Отключаем режим редактирования
+                _isEditingTranslation = false;
 
-                if (result == DialogResult.Yes)
-                {
-                    // Обновляем список переводов в объекте Word
-                    Word selectedWord = original_List_Box.SelectedItem as Word;
-                    if (selectedWord != null)
-                    {
-                        selectedWord.Translations.Clear();
-                        foreach (var item in translatelistBox.Items)
-                        {
-                            if (item is Translation translation)
-                            {
-                                selectedWord.Translations.Add(translation);
-                            }
-                        }
-                    }
+                // Очищаем текстовое поле и скрываем кнопки OK и Cancel
+                Translate_Text_box.Clear();
+                Translate_Text_box.Enabled = false;
+                ok_translate_button.Enabled = false;
+                cancel_translate_button.Enabled = false;
 
-                    // Переключаемся из режима редактирования
-                    _isEditing = false;
+                // Отвязываем translatelistBox от источника данных
+                translatelistBox.DataSource = null;
 
-                    // Очищаем поле ввода перевода и отключаем кнопки
-                    Translate_Text_box.Clear();
-                    Translate_Text_box.Enabled = false;
-                    ok_translate_button.Enabled = false;
-                    cancel_translate_button.Enabled = false;
-
-                    // Обновляем список слов
-                    ShowPage(currentPage);
-                }
+                // Обновляем отображение списка слов
+                ShowPage(currentPage);
             }
         }
+
 
 
         private void cancel_translate_button_Click(object sender, EventArgs e)
@@ -444,9 +419,45 @@ namespace dictionary_examen_Bukov.Views
             ShowPage(currentPage);
 
             // Выключаем режим редактирования
-            _isEditing = false;
+            _isEditingTranslation = false;
+        }
+
+        private void DictionaryForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Хотите сохранить изменения перед выходом?", "Сохранение", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
+            {
+                // Сохраняем данные в файл
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "Текстовые файлы (*.txt)|*.txt|Все файлы (*.*)|*.*";
+                saveFileDialog.Title = "Сохранить словарь перед выходом...";
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    // Устанавливаем путь к файлу из диалогового окна
+                    _viewModel.FilePath = saveFileDialog.FileName;
+
+                    // Сохраняем данные в файл
+                    SaveDictionary(_words, _viewModel.FilePath);
+                }
+                else
+                {
+                    // Если пользователь не выбрал файл, отменяем выход из приложения
+                    e.Cancel = true;
+                }
+            }
+            else if (result == DialogResult.Cancel)
+            {
+                // Если пользователь отменил действие, отменяем выход из приложения
+                e.Cancel = true;
+            }
+        }
+
+        private void Exit_dictionary_form_Click(object sender, EventArgs e)
+        {
+            Close();
         }
 
     }
 }
-

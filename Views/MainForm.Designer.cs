@@ -65,6 +65,7 @@
             this.Create_dictionary_button.TabIndex = 2;
             this.Create_dictionary_button.Text = "Создать новый словарь";
             this.Create_dictionary_button.UseVisualStyleBackColor = true;
+            this.Create_dictionary_button.Click += new System.EventHandler(this.Create_dictionary_button_Click);
             // 
             // Exit_button
             // 
@@ -75,6 +76,7 @@
             this.Exit_button.TabIndex = 3;
             this.Exit_button.Text = "Выход";
             this.Exit_button.UseVisualStyleBackColor = true;
+            this.Exit_button.Click += new System.EventHandler(this.Exit_button_Click);
             // 
             // MainForm
             // 
@@ -89,6 +91,7 @@
             this.MaximumSize = new System.Drawing.Size(370, 500);
             this.Name = "MainForm";
             this.Text = "Словарь";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing_1);
             this.ResumeLayout(false);
             this.PerformLayout();
 
