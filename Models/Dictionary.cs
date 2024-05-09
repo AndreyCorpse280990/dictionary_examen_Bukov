@@ -11,6 +11,8 @@ namespace dictionary_examen_Bukov.Models
             Words = new List<Word>();
         }
 
+        // Метод AddWord добавляет новое слово в словарь.
+        // originalWord: оригинальное слово, translations: список переводов.
         public void AddWord(string originalWord, List<string> translations)
         {
             Word word = new Word(originalWord);

@@ -6,15 +6,19 @@ using dictionary_examen_Bukov.Models;
 
 namespace dictionary_examen_Bukov.Services
 {
+    // Класс DictionaryService предоставляет методы для работы с файлами словарей.
     public class DictionaryService
     {
+        // Метод LoadDictionary загружает словарь из указанного файла.
         public Dictionary LoadDictionary(string filePath)
         {
+            // Создание нового экземпляра словаря.
             Dictionary dictionary = new Dictionary();
 
             // Чтение всех строк из файла
             string[] lines = File.ReadAllLines(filePath);
 
+            // Обработка каждой строки файла.
             foreach (string line in lines)
             {
                 // Разделение строки на части по символу ';'
@@ -40,10 +44,13 @@ namespace dictionary_examen_Bukov.Services
             return dictionary;
         }
 
+         // Метод GetWordCount возвращает количество слов в указанном файле словаря.
         public int GetWordCount(string filePath)
         {
             string[] lines = File.ReadAllLines(filePath);
             return lines.Length;
         }
+
+
     }
 }

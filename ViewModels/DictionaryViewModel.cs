@@ -9,6 +9,7 @@ using dictionary_examen_Bukov.Services;
 
 namespace dictionary_examen_Bukov.ViewModels
 {
+    // Класс DictionaryViewModel предоставляет данные и логику для представления словаря.
     public class DictionaryViewModel : INotifyPropertyChanged
     {
         private readonly DictionaryService _dictionaryService;
@@ -16,11 +17,13 @@ namespace dictionary_examen_Bukov.ViewModels
         private string _translationText;
         private List<Word> _words; // список слов
 
+        // Событие, сигнализирующее об изменении свойства.
         public event PropertyChangedEventHandler PropertyChanged;
 
         public Dictionary Dictionary { get; set; }
         public string FilePath { get; set; }
 
+        // Свойство, представляющее текст оригинальных слов..
         public string OriginalText
         {
             get { return _originalText; }
@@ -34,6 +37,7 @@ namespace dictionary_examen_Bukov.ViewModels
             }
         }
 
+        // Свойство, представляющее текст переводов.
         public string TranslationText
         {
             get { return _translationText; }
@@ -47,6 +51,7 @@ namespace dictionary_examen_Bukov.ViewModels
             }
         }
 
+        // Свойство, представляющее список слов.
         public List<Word> Words
         {
             get { return _words; }
@@ -58,34 +63,18 @@ namespace dictionary_examen_Bukov.ViewModels
             Dictionary = new Dictionary();
         }
 
-        public void LoadDictionary(string filePath)
-        {
-            Dictionary = _dictionaryService.LoadDictionary(filePath);
-            _words = Dictionary.Words; // Сохраняю список слов
-            UpdateTextBoxes(Dictionary);
-            FilePath = filePath;
-        }
 
+        // Метод для обновления текстовых полей.
         private void UpdateTextBoxes(Dictionary dictionary)
         {
             OriginalText = string.Join(Environment.NewLine, dictionary.Words.Select(w => w.OriginalWord));
             TranslationText = string.Join(Environment.NewLine, dictionary.Words.Select(w => string.Join(", ", w.Translations)));
         }
 
+        // Метод для получения списка слов из файла.
         public List<Word> GetWords(string filePath)
         {
             return _dictionaryService.LoadDictionary(filePath).Words;
-        }
-
-        public void SaveDictionary(List<Word> words, string filePath)
-        {
-            List<string> lines = new List<string>();
-            foreach (var word in words)
-            {
-                string translations = string.Join("|", word.Translations);
-                lines.Add($"\"{word.OriginalWord}\";\"{translations}\"");
-            }
-            File.WriteAllLines(filePath, lines);
         }
     }
 }

@@ -1,18 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using dictionary_examen_Bukov.Models;
+using dictionary_examen_Bukov.Services;
 using dictionary_examen_Bukov.ViewModels;
 using static dictionary_examen_Bukov.Models.Word;
+
+
 
 namespace dictionary_examen_Bukov.Views
 {
     public partial class DictionaryForm : Form
     {
         private readonly DictionaryViewModel _viewModel;
+        private readonly DictionaryService _dictionaryService;
         private int pageSize = 20; // Количество слов на странице
         private int currentPage = 1; // Текущая страница
         private List<Word> _words; // Список слов
@@ -25,18 +30,18 @@ namespace dictionary_examen_Bukov.Views
             InitializeComponent();
             _viewModel = viewModel;
 
+
             // Привязка данных
             original_List_Box.DisplayMember = "OriginalWord"; // Установка свойства для отображения оригинального слова
             original_List_Box.DataSource = _viewModel.Words;
-            // translationTextBox.DataBindings.Add("Text", _viewModel, "TranslationText");
+            
             translatelistBox.DisplayMember = "TranslateWord";
             translatelistBox.DataSource = _viewModel.Words;
-            // Добавляем обработчик события SelectedIndexChanged для original_List_Box
+            //  обработчик события SelectedIndexChanged для original_List_Box
             original_List_Box.SelectedIndexChanged += original_List_Box_SelectedIndexChanged;
             translatelistBox.SelectedIndexChanged += translatelistBox_SelectedIndexChanged;
             translatelistBox.SelectedIndexChanged += translatelistBox_SelectedIndexChanged_Edit;
 
-            // Скрываем текстовое поле и кнопку OK при инициализации формы
             Edit_Original_Button.Enabled = false;
             ok_original_Button.Enabled = false;
             originalTextBox.Enabled = false;
@@ -46,6 +51,7 @@ namespace dictionary_examen_Bukov.Views
 
         }
 
+        // Метод для загрузки и отображения словаря
         public void LoadAndShow(string filePath)
         {
             try
@@ -60,35 +66,36 @@ namespace dictionary_examen_Bukov.Views
             }
         }
 
+        // Метод для установки статуса количества слов
         public void SetWordCountStatus(int wordCount)
         {
             toolStripStatusLabel1.Text = $"Количество слов: {wordCount}";
         }
 
+        // Метод для отображения страницы
         private void ShowPage(int page)
         {
             int startIndex = (page - 1) * pageSize;
             int endIndex = startIndex + pageSize;
 
             original_List_Box.Items.Clear();
-            // Не нужно обнулять и очищать источник данных для translatelistBox
-            translatelistBox.Items.Clear(); // Очищаем предыдущие элементы
+            translatelistBox.Items.Clear(); // очистка предыдущих элементов
 
             for (int i = startIndex; i < endIndex && i < _words.Count; i++)
             {
                 original_List_Box.Items.Add(_words[i]);
             }
 
-            // Выбираем первое слово на новой странице, если это возможно
+            // выбор первого слова на странице
             if (original_List_Box.Items.Count > 0)
             {
                 original_List_Box.SelectedIndex = 0;
-                // Убедитесь, что обработчик события вызывается с правильными аргументами
                 original_List_Box_SelectedIndexChanged(null, null);
             }
         }
 
 
+        // Обработчик нажатия кнопки "Предыдущая страница"
         private void Previous_Button_Click(object sender, EventArgs e)
         {
             if (currentPage > 1)
@@ -99,7 +106,7 @@ namespace dictionary_examen_Bukov.Views
             }
         }
 
-
+        // Обработчик нажатия кнопки "Следующая страница"
         private void Next_Button_Click(object sender, EventArgs e)
         {
             if (currentPage < (_words.Count + pageSize - 1) / pageSize)
@@ -114,7 +121,7 @@ namespace dictionary_examen_Bukov.Views
         private void ThreePageNextButton_Click(object sender, EventArgs e)
         {
             int totalPages = (_words.Count + pageSize - 1) / pageSize;
-            if (currentPage + 3 <= totalPages) // Проверка, чтобы не выйти за пределы массива
+            if (currentPage + 3 <= totalPages) 
             {
                 currentPage += 3;
                 ShowPage(currentPage);
@@ -122,17 +129,17 @@ namespace dictionary_examen_Bukov.Views
             }
             else if (currentPage < totalPages)
             {
-                currentPage = totalPages; // Если currentPage + 3 больше или равно totalPages, перемещаемся на последнюю страницу
+                currentPage = totalPages; // Если currentPage + 3 больше или равно totalPages, то перемещение на посл страницу
                 ShowPage(currentPage);
                 SetNumberPage();
             }
         }
 
 
-        // перемещение на 3 страницы назад
+        // Обработчик нажатия кнопки "Переместиться на 3 страницы назад"
         private void threePagePreviousButton_Click(object sender, EventArgs e)
         {
-            if (currentPage > 3) // Проверка, чтобы не выйти за пределы массива
+            if (currentPage > 3) 
             {
                 currentPage -= 3;
                 ShowPage(currentPage);
@@ -146,6 +153,7 @@ namespace dictionary_examen_Bukov.Views
             }
         }
 
+        // Обработчик нажатия кнопки "Первая страница"
         private void firstPageButton_Click(object sender, EventArgs e)
         {
             currentPage = 1;
@@ -153,6 +161,7 @@ namespace dictionary_examen_Bukov.Views
             SetNumberPage();
         }
 
+        // обработчик нажатия кнопки "последняя страница"
         private void endPageButton_Click(object sender, EventArgs e)
         {
             int totalPages = (_words.Count + pageSize - 1) / pageSize;
@@ -161,41 +170,41 @@ namespace dictionary_examen_Bukov.Views
             SetNumberPage();
         }
 
+        // Метод для установки номера текущей страницы
         public void SetNumberPage()
         {
             toolStripStatusLabel2.Text = $"Страница {currentPage}";
         }
 
+
+        // Обработчик нажатия кнопки "Поиск"
         private void Search_button_Click(object sender, EventArgs e)
         {
             string searchWord = searchTextBox.Text.ToLower();
 
-            // Находим слово в списке слов
+            // поиск слова в списке слов
             Word foundWord = _words.FirstOrDefault(word => word.OriginalWord.ToLower() == searchWord);
 
             if (foundWord != null)
             {
-                // Находим индекс найденного слова в списке _words
+                // поиск индекса найденного слова в списке _words
                 int index = _words.IndexOf(foundWord);
-
-                // Вычисляем страницу, на которой находится найденное слово
+          
                 int page = index / pageSize + 1;
 
-                // Устанавливаем текущую страницу
+                // установка текущей страницы
                 currentPage = page;
 
-                // Показываем страницу, на которой находится найденное слово
                 ShowPage(currentPage);
 
-                // Устанавливаем номер страницы
                 SetNumberPage();
 
-                // Выбираем найденное слово в original_List_Box
+                // выбор найденноого слово в original_List_Box
                 original_List_Box.SelectedItem = foundWord;
             }
             else
             {
-                // Если слово не найдено, очищаем original_List_Box и translationTextBox
+                // Если слово не найдено, то очистка original_List_Box и translationTextBox
                 original_List_Box.ClearSelected();
                 translatelistBox.ClearSelected();
                 MessageBox.Show("Слово не найдено", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -203,44 +212,44 @@ namespace dictionary_examen_Bukov.Views
         }
 
 
+        // Обработчик события выбора элемента в списке listBox
         private void listBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             ListBox listBox = sender as ListBox;
             if (listBox == original_List_Box)
             {
-                // Если выбрано слово в original_List_Box, обновляем translatelistBox
+                // Если выбрано слово в original_List_Box, то обновление translatelistBox
                 Word selectedWord = (Word)listBox.SelectedItem;
                 translatelistBox.DataSource = selectedWord.Translations;
                 translatelistBox.Refresh();
             }
             else if (listBox == translatelistBox)
             {
-                // Если выбран перевод в translatelistBox, обновляем original_List_Box
+                // Если выбран перевод в translatelistBox, то обновление original_List_Box
                 Word selectedWord = (Word)listBox.SelectedItem;
                 original_List_Box.DataSource = selectedWord.OriginalWord;
                 original_List_Box.Refresh();
             }
         }
 
-
+        // Обработчик события выбора элемента в original_List_Box
         private void original_List_Box_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Проверяем, выбрано ли слово для редактирования и что _isEditing равно false
+            // проверка, выбрано ли слово для редактирования и что _isEditing равно false
             if (!_isEditingOriginal && original_List_Box.SelectedItem != null)
             {
-                // Получаем выбранное слово
+                // получение выбранного слова
                 Word selectedWord = (Word)original_List_Box.SelectedItem;
 
-                // Включаем кнопку EditButton
                 Edit_Original_Button.Enabled = true;
 
-                // Заполняем текстовое поле оригинального слова выбранным словом
+                // заполнение текстового поля оригинального слова выбранным словом
                 originalTextBox.Text = selectedWord.OriginalWord;
 
-                // Очищаем translatelistBox перед обновлением
+                // очистка translatelistBox перед обновлением
                 translatelistBox.Items.Clear();
 
-                // Обновляем translatelistBox с помощью выбранного слова
+                // обновление translatelistBox с помощью выбранного слова
                 if (selectedWord.Translations != null)
                 {
                     foreach (var translation in selectedWord.Translations)
@@ -252,58 +261,51 @@ namespace dictionary_examen_Bukov.Views
         }
 
 
+        // Обработчик события изменения выбранного элемента в translatelistBox
         private void translatelistBox_SelectedIndexChanged_Edit(object sender, EventArgs e)
         {
-            // Получаем выбранное слово из списка
+            // получение выбранного слова из списка
             Word selectedWord = (Word)original_List_Box.SelectedItem;
 
-            // Обновляем translatelistBox с помощью выбранного слова
+            // обновление translatelistBox с помощью выбранного слова
             translatelistBox.DataSource = selectedWord.Translations;
             translatelistBox.Refresh();
         }
 
 
-
+        // Обработчик события нажатия кнопки редактирования оригинального слова
         private void EditButton_Click(object sender, EventArgs e)
         {
-            // Получаем выбранное слово из списка или другого элемента управления
+            // получение выбранного слова из списка или другого элемента управления
             _selectedWord = original_List_Box.SelectedItem as Word;
 
-            // Переключаемся в режим редактирования
             _isEditingOriginal = true;
-
-            // Включаем режим редактирования элементов управления
+            
             originalTextBox.Enabled = true;
             ok_original_Button.Enabled = true;
 
-            // Очищаем translatelistBox перед редактированием
+            // очищение translatelistBox перед редактированием
             translatelistBox.DataSource = null;
             translatelistBox.Refresh();
 
-            // Фокусируемся на поле originalTextBox
             originalTextBox.Focus();
         }
 
 
-
-
-
+        // // Обработчик события нажатия кнопки OK оригинального слова
         private void okButton_Click_1(object sender, EventArgs e)
         {
             if (_isEditingOriginal && _selectedWord != null)
             {
-                // Обновляем оригинальное слово выбранным значением из текстового поля
+                // обновление оригинального слова выбранным значением из текстового поля
                 _selectedWord.OriginalWord = originalTextBox.Text;
 
-                // Отключаем режим редактирования
                 _isEditingOriginal = false;
 
-                // Очищаем текстовое поле и скрываем кнопку OK
                 originalTextBox.Clear();
                 originalTextBox.Enabled = false;
                 ok_original_Button.Enabled = false;
 
-                // Обновляем отображение списка слов
                 ShowPage(currentPage);
             }
         }
@@ -319,35 +321,32 @@ namespace dictionary_examen_Bukov.Views
             File.WriteAllLines(filePath, lines);
         }
 
+        // обработчик нажатия кнопки cancel 
         private void cancelButton_Click(object sender, EventArgs e)
-        {
-            // Очищаем текстовое поле и скрываем кнопку OK
+        {          
             originalTextBox.Clear();
             originalTextBox.Enabled = false;
             ok_original_Button.Enabled = false;
 
-            // Обновляем отображение списка слов
+            // обновление отображение списка слов
             ShowPage(currentPage);
 
-            // Выключаем режим редактирования
             _isEditingOriginal = false;
         }
 
+
         private void translatelistBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Проверяем, находимся ли мы в режиме редактирования
+            // проверка, включен ли  режим редактирования
             if (!_isEditingTranslation && translatelistBox.SelectedItem != null && translatelistBox.SelectedItem is Word selectedWord)
             {
-                // Получаем выбранный перевод
+                // получение  перевода
                 Translation selectedTranslation = (Translation)translatelistBox.SelectedItem;
 
-                // Включаем кнопку редактирования
                 edit_translate_button.Enabled = true;
 
-                // Заполняем текстовое поле с переводом выбранным значением
                 Translate_Text_box.Text = selectedTranslation.Text;
 
-                // Очищаем original_List_Box
                 original_List_Box.DataSource = null;
                 original_List_Box.Refresh();
             }
@@ -356,25 +355,20 @@ namespace dictionary_examen_Bukov.Views
 
         private void edit_translate_button_Click(object sender, EventArgs e)
         {
-            // Проверяем, находимся ли мы в режиме редактирования
+            // проверка, находимся ли мы в режиме редактирования
             if (!_isEditingTranslation && translatelistBox.SelectedItem != null && translatelistBox.SelectedItem is Translation selectedTranslation)
             {
-                // Включаем режим редактирования
                 _isEditingTranslation = true;
 
-                // Включаем элементы управления для редактирования
                 Translate_Text_box.Enabled = true;
                 ok_translate_button.Enabled = true;
                 cancel_translate_button.Enabled = true;
 
-                // Очищаем original_List_Box перед редактированием
                 original_List_Box.DataSource = null;
                 original_List_Box.Refresh();
 
-                // Получаем выбранный перевод из списка
                 Translate_Text_box.Text = selectedTranslation.Text;
-
-                // Фокусируемся на поле Translate_Text_box
+            
                 Translate_Text_box.Focus();
             }
         }
@@ -385,40 +379,33 @@ namespace dictionary_examen_Bukov.Views
         {
             if (_isEditingTranslation && translatelistBox.SelectedItem is Translation selectedTranslation)
             {
-                // Обновляем текст перевода выбранным значением из текстового поля
+                // обновление  текста перевода выбранным значением из текстового поля
                 selectedTranslation.Text = Translate_Text_box.Text;
 
-                // Отключаем режим редактирования
                 _isEditingTranslation = false;
 
-                // Очищаем текстовое поле и скрываем кнопки OK и Cancel
                 Translate_Text_box.Clear();
                 Translate_Text_box.Enabled = false;
                 ok_translate_button.Enabled = false;
                 cancel_translate_button.Enabled = false;
 
-                // Отвязываем translatelistBox от источника данных
                 translatelistBox.DataSource = null;
 
-                // Обновляем отображение списка слов
+                // обвноление отображения списка слов
                 ShowPage(currentPage);
             }
         }
 
 
-
         private void cancel_translate_button_Click(object sender, EventArgs e)
-        {
-            // Очищаем текстовое поле и скрываем кнопки OK и Cancel
+        {         
             Translate_Text_box.Clear();
             Translate_Text_box.Enabled = false;
             ok_translate_button.Enabled = false;
             cancel_translate_button.Enabled = false;
 
-            // Обновляем отображение списка слов
             ShowPage(currentPage);
 
-            // Выключаем режим редактирования
             _isEditingTranslation = false;
         }
 
@@ -428,28 +415,23 @@ namespace dictionary_examen_Bukov.Views
 
             if (result == DialogResult.Yes)
             {
-                // Сохраняем данные в файл
+                // сохранение данныых в файл
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
                 saveFileDialog.Filter = "Текстовые файлы (*.txt)|*.txt|Все файлы (*.*)|*.*";
                 saveFileDialog.Title = "Сохранить словарь перед выходом...";
 
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    // Устанавливаем путь к файлу из диалогового окна
                     _viewModel.FilePath = saveFileDialog.FileName;
-
-                    // Сохраняем данные в файл
                     SaveDictionary(_words, _viewModel.FilePath);
                 }
                 else
                 {
-                    // Если пользователь не выбрал файл, отменяем выход из приложения
                     e.Cancel = true;
                 }
             }
             else if (result == DialogResult.Cancel)
             {
-                // Если пользователь отменил действие, отменяем выход из приложения
                 e.Cancel = true;
             }
         }
