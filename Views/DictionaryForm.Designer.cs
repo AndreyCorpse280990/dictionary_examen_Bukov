@@ -147,18 +147,20 @@
             // 
             // searchTextBox
             // 
-            this.searchTextBox.Location = new System.Drawing.Point(954, 591);
+            this.searchTextBox.Location = new System.Drawing.Point(810, 591);
+            this.searchTextBox.Multiline = true;
             this.searchTextBox.Name = "searchTextBox";
-            this.searchTextBox.Size = new System.Drawing.Size(100, 20);
+            this.searchTextBox.Size = new System.Drawing.Size(244, 38);
             this.searchTextBox.TabIndex = 13;
             // 
             // Search_button
             // 
+            this.Search_button.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Search_button.Location = new System.Drawing.Point(1060, 591);
             this.Search_button.Name = "Search_button";
-            this.Search_button.Size = new System.Drawing.Size(75, 23);
+            this.Search_button.Size = new System.Drawing.Size(105, 38);
             this.Search_button.TabIndex = 14;
-            this.Search_button.Text = "Поиск";
+            this.Search_button.Text = "Search";
             this.Search_button.UseVisualStyleBackColor = true;
             this.Search_button.Click += new System.EventHandler(this.Search_button_Click);
             // 
@@ -175,7 +177,7 @@
             // originalTextBox
             // 
             this.originalTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.originalTextBox.Location = new System.Drawing.Point(3, 52);
+            this.originalTextBox.Location = new System.Drawing.Point(6, 74);
             this.originalTextBox.Name = "originalTextBox";
             this.originalTextBox.Size = new System.Drawing.Size(100, 30);
             this.originalTextBox.TabIndex = 18;
@@ -183,7 +185,7 @@
             // ok_original_Button
             // 
             this.ok_original_Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.ok_original_Button.Location = new System.Drawing.Point(109, 52);
+            this.ok_original_Button.Location = new System.Drawing.Point(109, 73);
             this.ok_original_Button.Name = "ok_original_Button";
             this.ok_original_Button.Size = new System.Drawing.Size(97, 31);
             this.ok_original_Button.TabIndex = 19;
@@ -193,9 +195,10 @@
             // 
             // Edit_Original_Button
             // 
-            this.Edit_Original_Button.Location = new System.Drawing.Point(12, 625);
+            this.Edit_Original_Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Edit_Original_Button.Location = new System.Drawing.Point(12, 588);
             this.Edit_Original_Button.Name = "Edit_Original_Button";
-            this.Edit_Original_Button.Size = new System.Drawing.Size(75, 23);
+            this.Edit_Original_Button.Size = new System.Drawing.Size(91, 41);
             this.Edit_Original_Button.TabIndex = 20;
             this.Edit_Original_Button.Text = "Edit";
             this.Edit_Original_Button.UseVisualStyleBackColor = true;
@@ -206,7 +209,7 @@
             this.translatelistBox.Font = new System.Drawing.Font("Book Antiqua", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.translatelistBox.FormattingEnabled = true;
             this.translatelistBox.ItemHeight = 24;
-            this.translatelistBox.Location = new System.Drawing.Point(446, 112);
+            this.translatelistBox.Location = new System.Drawing.Point(452, 110);
             this.translatelistBox.Name = "translatelistBox";
             this.translatelistBox.Size = new System.Drawing.Size(713, 460);
             this.translatelistBox.TabIndex = 21;
@@ -214,7 +217,7 @@
             // cancel_Original_Button
             // 
             this.cancel_Original_Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.cancel_Original_Button.Location = new System.Drawing.Point(212, 51);
+            this.cancel_Original_Button.Location = new System.Drawing.Point(212, 73);
             this.cancel_Original_Button.Name = "cancel_Original_Button";
             this.cancel_Original_Button.Size = new System.Drawing.Size(81, 31);
             this.cancel_Original_Button.TabIndex = 22;
@@ -254,9 +257,10 @@
             // 
             // edit_translate_button
             // 
+            this.edit_translate_button.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.edit_translate_button.Location = new System.Drawing.Point(452, 588);
             this.edit_translate_button.Name = "edit_translate_button";
-            this.edit_translate_button.Size = new System.Drawing.Size(75, 23);
+            this.edit_translate_button.Size = new System.Drawing.Size(98, 41);
             this.edit_translate_button.TabIndex = 26;
             this.edit_translate_button.Text = "Edit";
             this.edit_translate_button.UseVisualStyleBackColor = true;
@@ -265,7 +269,7 @@
             // Exit_dictionary_form
             // 
             this.Exit_dictionary_form.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Exit_dictionary_form.Location = new System.Drawing.Point(944, 58);
+            this.Exit_dictionary_form.Location = new System.Drawing.Point(1055, 56);
             this.Exit_dictionary_form.Name = "Exit_dictionary_form";
             this.Exit_dictionary_form.Size = new System.Drawing.Size(110, 48);
             this.Exit_dictionary_form.TabIndex = 27;

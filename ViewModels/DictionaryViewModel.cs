@@ -76,5 +76,49 @@ namespace dictionary_examen_Bukov.ViewModels
         {
             return _dictionaryService.LoadDictionary(filePath).Words;
         }
+
+        // метож для сохранения словаря в файл
+        public void SaveDictionary(List<Word> words, string filePath)
+        {
+            List<string> lines = new List<string>();
+            foreach (var word in words)
+            {
+                string translations = string.Join("|", word.Translations);
+                lines.Add($"\"{word.OriginalWord}\";\"{translations}\"");
+            }
+            File.WriteAllLines(filePath, lines);
+        }
+
+        // Метод для добавления слова и его переводов в словарь.
+        public void AddWord(string originalWord, List<string> translations)
+        {
+            Dictionary.AddWord(originalWord, translations);
+            UpdateTextBoxes(Dictionary);
+        }
+
+        // Метод для замены слова и его переводов в словаре.
+        public void ReplaceWord(string originalWord, List<string> translations)
+        {
+            Dictionary.ReplaceWord(originalWord, translations);
+            UpdateTextBoxes(Dictionary);
+        }
+
+        // Метод для удаления слова и его переводов из словаря.
+        public void DeleteWord(string originalWord)
+        {
+            Dictionary.DeleteWord(originalWord);
+            UpdateTextBoxes(Dictionary);
+        }
+
+        // Метод для удаления перевода слова из словаря.
+        public void DeleteTranslation(string originalWord, string translation)
+        {
+            Dictionary.DeleteTranslation(originalWord, translation);
+            UpdateTextBoxes(Dictionary);
+        }
+
+
+
+
     }
 }

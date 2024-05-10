@@ -51,6 +51,7 @@ namespace dictionary_examen_Bukov.Views
 
         }
 
+
         // Метод для загрузки и отображения словаря
         public void LoadAndShow(string filePath)
         {
@@ -94,7 +95,6 @@ namespace dictionary_examen_Bukov.Views
             }
         }
 
-
         // Обработчик нажатия кнопки "Предыдущая страница"
         private void Previous_Button_Click(object sender, EventArgs e)
         {
@@ -134,7 +134,6 @@ namespace dictionary_examen_Bukov.Views
                 SetNumberPage();
             }
         }
-
 
         // Обработчик нажатия кнопки "Переместиться на 3 страницы назад"
         private void threePagePreviousButton_Click(object sender, EventArgs e)
@@ -176,7 +175,6 @@ namespace dictionary_examen_Bukov.Views
             toolStripStatusLabel2.Text = $"Страница {currentPage}";
         }
 
-
         // Обработчик нажатия кнопки "Поиск"
         private void Search_button_Click(object sender, EventArgs e)
         {
@@ -210,7 +208,6 @@ namespace dictionary_examen_Bukov.Views
                 MessageBox.Show("Слово не найдено", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         // Обработчик события выбора элемента в списке listBox
         private void listBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -260,7 +257,6 @@ namespace dictionary_examen_Bukov.Views
             }
         }
 
-
         // Обработчик события изменения выбранного элемента в translatelistBox
         private void translatelistBox_SelectedIndexChanged_Edit(object sender, EventArgs e)
         {
@@ -271,7 +267,6 @@ namespace dictionary_examen_Bukov.Views
             translatelistBox.DataSource = selectedWord.Translations;
             translatelistBox.Refresh();
         }
-
 
         // Обработчик события нажатия кнопки редактирования оригинального слова
         private void EditButton_Click(object sender, EventArgs e)
@@ -291,8 +286,7 @@ namespace dictionary_examen_Bukov.Views
             originalTextBox.Focus();
         }
 
-
-        // // Обработчик события нажатия кнопки OK оригинального слова
+        // Обработчик события нажатия кнопки OK оригинального слова
         private void okButton_Click_1(object sender, EventArgs e)
         {
             if (_isEditingOriginal && _selectedWord != null)
@@ -310,18 +304,7 @@ namespace dictionary_examen_Bukov.Views
             }
         }
 
-        public void SaveDictionary(List<Word> words, string filePath)
-        {
-            List<string> lines = new List<string>();
-            foreach (var word in words)
-            {
-                string translations = string.Join("|", word.Translations);
-                lines.Add($"\"{word.OriginalWord}\";\"{translations}\"");
-            }
-            File.WriteAllLines(filePath, lines);
-        }
-
-        // обработчик нажатия кнопки cancel 
+        // обработчик нажатия кнопки cancel оригинального слова
         private void cancelButton_Click(object sender, EventArgs e)
         {          
             originalTextBox.Clear();
@@ -333,7 +316,6 @@ namespace dictionary_examen_Bukov.Views
 
             _isEditingOriginal = false;
         }
-
 
         private void translatelistBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -352,7 +334,7 @@ namespace dictionary_examen_Bukov.Views
             }
         }
 
-
+        // Обработчик события нажатия кнопки редактирования перевода
         private void edit_translate_button_Click(object sender, EventArgs e)
         {
             // проверка, находимся ли мы в режиме редактирования
@@ -373,8 +355,7 @@ namespace dictionary_examen_Bukov.Views
             }
         }
 
-
-
+        // Обработчик события нажатия кнопки OK перевода
         private void ok_translate_button_Click(object sender, EventArgs e)
         {
             if (_isEditingTranslation && translatelistBox.SelectedItem is Translation selectedTranslation)
@@ -396,7 +377,7 @@ namespace dictionary_examen_Bukov.Views
             }
         }
 
-
+        // обработчик нажатия кнопки cancel перевода
         private void cancel_translate_button_Click(object sender, EventArgs e)
         {         
             Translate_Text_box.Clear();
@@ -409,6 +390,7 @@ namespace dictionary_examen_Bukov.Views
             _isEditingTranslation = false;
         }
 
+        // обработчик закрытия формы
         private void DictionaryForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             DialogResult result = MessageBox.Show("Хотите сохранить изменения перед выходом?", "Сохранение", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
@@ -423,7 +405,7 @@ namespace dictionary_examen_Bukov.Views
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     _viewModel.FilePath = saveFileDialog.FileName;
-                    SaveDictionary(_words, _viewModel.FilePath);
+                    _viewModel.SaveDictionary(_words, _viewModel.FilePath);
                 }
                 else
                 {
@@ -436,10 +418,13 @@ namespace dictionary_examen_Bukov.Views
             }
         }
 
+        // обработчик кнопки выхода из формы
         private void Exit_dictionary_form_Click(object sender, EventArgs e)
         {
             Close();
         }
+
+
 
     }
 }
