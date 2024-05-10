@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using dictionary_examen_Bukov.Models;
 using dictionary_examen_Bukov.Services;
+using System.Windows.Forms;
+
 
 namespace dictionary_examen_Bukov.ViewModels
 {
@@ -14,7 +16,7 @@ namespace dictionary_examen_Bukov.ViewModels
     {
         private readonly DictionaryService _dictionaryService;
         private string _originalText;
-        private string _translationText;
+        public static string _translationText;
         private List<Word> _words; // список слов
 
         // Событие, сигнализирующее об изменении свойства.
@@ -22,6 +24,9 @@ namespace dictionary_examen_Bukov.ViewModels
 
         public Dictionary Dictionary { get; set; }
         public string FilePath { get; set; }
+
+        public TextBox TranslationTextBox { get; set; }
+
 
         // Свойство, представляющее текст оригинальных слов..
         public string OriginalText

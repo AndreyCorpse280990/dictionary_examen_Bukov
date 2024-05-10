@@ -424,7 +424,5 @@ namespace dictionary_examen_Bukov.Views
             Close();
         }
 
-
-
     }
 }

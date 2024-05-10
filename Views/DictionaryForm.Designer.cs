@@ -147,6 +147,7 @@
             // 
             // searchTextBox
             // 
+            this.searchTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.searchTextBox.Location = new System.Drawing.Point(810, 591);
             this.searchTextBox.Multiline = true;
             this.searchTextBox.Name = "searchTextBox";
@@ -228,7 +229,7 @@
             // Translate_Text_box
             // 
             this.Translate_Text_box.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Translate_Text_box.Location = new System.Drawing.Point(461, 54);
+            this.Translate_Text_box.Location = new System.Drawing.Point(452, 71);
             this.Translate_Text_box.Name = "Translate_Text_box";
             this.Translate_Text_box.Size = new System.Drawing.Size(100, 30);
             this.Translate_Text_box.TabIndex = 23;
@@ -236,9 +237,9 @@
             // ok_translate_button
             // 
             this.ok_translate_button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.ok_translate_button.Location = new System.Drawing.Point(567, 52);
+            this.ok_translate_button.Location = new System.Drawing.Point(558, 69);
             this.ok_translate_button.Name = "ok_translate_button";
-            this.ok_translate_button.Size = new System.Drawing.Size(75, 32);
+            this.ok_translate_button.Size = new System.Drawing.Size(97, 32);
             this.ok_translate_button.TabIndex = 24;
             this.ok_translate_button.Text = "ok";
             this.ok_translate_button.UseVisualStyleBackColor = true;
@@ -247,9 +248,9 @@
             // cancel_translate_button
             // 
             this.cancel_translate_button.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.cancel_translate_button.Location = new System.Drawing.Point(648, 51);
+            this.cancel_translate_button.Location = new System.Drawing.Point(661, 69);
             this.cancel_translate_button.Name = "cancel_translate_button";
-            this.cancel_translate_button.Size = new System.Drawing.Size(86, 33);
+            this.cancel_translate_button.Size = new System.Drawing.Size(81, 33);
             this.cancel_translate_button.TabIndex = 25;
             this.cancel_translate_button.Text = "cancel";
             this.cancel_translate_button.UseVisualStyleBackColor = true;
